@@ -6,12 +6,12 @@ import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory, useParams } from "react-router-dom";
 import Lecture from "../components/Lecture";
-import emailjs from  "emailjs-com"
-import async from "async"
+import emailjs from "emailjs-com";
+import async from "async";
 import { auth, db } from "../firebase";
-
 import "./Class.css";
 
+//to display the list of lectures
 function LectureScreen() {
   var today = new Date();
   const [classData, setClassData] = useState({});
@@ -43,7 +43,6 @@ function LectureScreen() {
     setLectureData(reversedArray);
   }, [lectureData]);
 
-  
   const createLecture = async () => {
     try {
       const myClassRef = await db.collection("classes").doc(id).get();
@@ -61,29 +60,43 @@ function LectureScreen() {
       myClassRef.ref.update({
         lectures: tempLectures,
       });
-      async.each(classData?.enrolledStudents,function(email){
-        async.waterfall([function(){
-          const templateParams= {
-            item:"Lecture",
-            className:classData.name,
-            url: "localhost:3000/class/"+id,
-            recipient:email
-          }
-          emailjs.send('service_sndm6ld', 'template_bo7xt4c', templateParams,"user_3T2tYqOmDN3n8XpkX43g5")
-      .then(function(response) {
-       console.log('SUCCESS!', response.status, response.text);
-    }, function(error) {
-       console.log('FAILED...', error);
-    });
-        }])
-
-      },function(err) {
-        if( err ) {
+      async.each(
+        classData?.enrolledStudents,
+        function (email) {
+          async.waterfall([
+            function () {
+              const templateParams = {
+                item: "Lecture",
+                className: classData.name,
+                url: "localhost:3000/class/" + id,
+                recipient: email,
+              };
+              emailjs
+                .send(
+                  "service_sndm6ld",
+                  "template_bo7xt4c",
+                  templateParams,
+                  "user_3T2tYqOmDN3n8XpkX43g5"
+                )
+                .then(
+                  function (response) {
+                    console.log("SUCCESS!", response.status, response.text);
+                  },
+                  function (error) {
+                    console.log("FAILED...", error);
+                  }
+                );
+            },
+          ]);
+        },
+        function (err) {
+          if (err) {
             console.log(err);
-        } else {
-            alert('All emails have been sent successfully');
+          } else {
+            alert("All emails have been sent successfully");
+          }
         }
-      })
+      );
       setLectureTitle("");
       setLectureLink("");
       setLectureNote("");
@@ -101,7 +114,7 @@ function LectureScreen() {
       .onSnapshot((snapshot) => {
         const data = snapshot.data();
         if (!data) history.replace("/");
-        console.log(data);
+
         setClassData(data);
       });
   }, []);
@@ -112,7 +125,7 @@ function LectureScreen() {
   }, [loading, user]);
 
   return (
-    <div className="class" style={{marginTop:"80px"}}>
+    <div className="class" style={{ marginTop: "80px" }}>
       <div className="class__nameBox">
         <div className="class__name">{classData?.name}</div>
         <p>Created By: {classData?.creatorName}</p>
@@ -124,7 +137,7 @@ function LectureScreen() {
             history.push("/class/" + id);
           }}
         >
-          Lectures
+          <p>Lectures</p>
         </Button>
         <Button
           onClick={(e) => {
@@ -132,7 +145,7 @@ function LectureScreen() {
             history.push("/class/" + id + "/discussion");
           }}
         >
-          Discussion
+          <p>Discussion</p>
         </Button>
         <Button
           onClick={(e) => {
@@ -140,14 +153,14 @@ function LectureScreen() {
             history.push("/class/" + id + "/assignments");
           }}
         >
-          Assignments
+          <p>Assignments</p>
         </Button>
       </div>
 
       {user?.uid == classData.creatorUid ? (
-        
         <div className="class__announce">
-          <h3>Create a Lecture</h3>
+         
+          <h3 ><b>Create a Lecture</b></h3>
           <input
             type="text"
             value={lectureTitle}
@@ -157,7 +170,9 @@ function LectureScreen() {
           />
 
           {/* <MuiPickersUtilsProvider utils={MomentUtils}> */}
-          <label><p>Lecture Date:</p> </label>
+          <label>
+            <p>Lecture Date:</p>{" "}
+          </label>
           <input
             placeholder="Enter the lecture date (DD/MM/YYYY)"
             type="date"
@@ -165,7 +180,10 @@ function LectureScreen() {
             required
             onChange={(e) => setLectureDate(e.target.value)}
           />
-          <label><p>Lecture Time:</p></label>
+          
+          <label>
+            <p>Lecture Time:</p>
+          </label>
           <input
             type="time"
             value={lectureTime}
@@ -173,7 +191,8 @@ function LectureScreen() {
             onChange={(e) => setLectureTime(e.target.value)}
             placeholder="Enter the lecture time (hh:mm)"
           />
-          {/* </MuiPickersUtilsProvider> */}
+          
+          
           <input
             type="text"
             value={lectureNote}
@@ -200,11 +219,13 @@ function LectureScreen() {
 
           <Button
             variant="contained"
+            size="medium"
             style={{
               "margin-left": "auto",
               display: "block",
               "background-color": "green",
               color: "white",
+              fontSize: "15px",
             }}
             onClick={createLecture}
           >
@@ -214,7 +235,9 @@ function LectureScreen() {
       ) : (
         ""
       )}
-      {user?.uid!==classData?.creatorUid && lectureData?.length===0 ? <div style={{
+      {user?.uid !== classData?.creatorUid && lectureData?.length === 0 ? (
+        <div
+          style={{
             display: "block",
             marginLeft: "auto",
             marginRight: "auto",
@@ -223,7 +246,13 @@ function LectureScreen() {
             marginBottom: "10px",
             width: "60%",
           }}
-        > <h3>No lectures added yet!</h3></div>:""}
+        >
+          {" "}
+          <h3>No lectures added yet!</h3>
+        </div>
+      ) : (
+        ""
+      )}
 
       {lectureData?.map((lecture) => (
         <Lecture

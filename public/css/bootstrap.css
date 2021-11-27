@@ -1077,7 +1077,7 @@ th {
           box-sizing: border-box;
 }
 html {
-  font-size: 10px;
+ 
 
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -1286,9 +1286,7 @@ h6,
 .h6 {
   font-size: 12px;
 }
-p {
-  margin: 0 0 10px;
-}
+
 .lead {
   margin-bottom: 20px;
   font-size: 16px;

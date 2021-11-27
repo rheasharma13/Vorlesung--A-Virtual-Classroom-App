@@ -1,7 +1,4 @@
-import { IconButton, Button } from "@material-ui/core";
-import { SendOutlined } from "@material-ui/icons";
 import moment from "moment";
-import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -10,6 +7,7 @@ import Announcement from "../components/Announcement";
 import { auth, db } from "../firebase";
 import "./Class.css";
 
+//to display the reported posts
 function ReportedPosts() {
   const [classData, setClassData] = useState({});
   const [announcementContent, setAnnouncementContent] = useState("");

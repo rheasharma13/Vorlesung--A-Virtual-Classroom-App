@@ -13,8 +13,7 @@ const firebaseConfig = {
 
   messagingSenderId: "115896894901",
 
-  appId: "1:115896894901:web:74f2270878d23f3879c5fc"
-
+  appId: "1:115896894901:web:74f2270878d23f3879c5fc",
 };
 
 const app = firebase.initializeApp(firebaseConfig);
@@ -26,9 +25,9 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 const signInWithGoogle = async () => {
   try {
     const response = await auth.signInWithPopup(googleProvider);
-    console.log(response.user);
+
     const user = response.user;
-    console.log(`User ID - ${user.uid}`);
+
     const querySnapshot = await db
       .collection("users")
       .where("uid", "==", user.uid)
@@ -38,7 +37,7 @@ const signInWithGoogle = async () => {
       await db.collection("users").add({
         uid: user.uid,
         enrolledClassrooms: [],
-        createdClassrooms:[]
+        createdClassrooms: [],
       });
     }
   } catch (err) {
@@ -49,4 +48,4 @@ const logout = () => {
   auth.signOut();
 };
 
-export { app, auth, db, signInWithGoogle, logout ,storage};
+export { app, auth, db, signInWithGoogle, logout, storage };

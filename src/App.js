@@ -12,7 +12,7 @@ import CreatedClasses from "./screens/CreatedClasses"
 import ReportedPosts from "./screens/ReportedPosts"
 import SmoothScroll from "smooth-scroll";
 import "./style.css"
-import "./bootstrap.min.css"
+import "./bootstrap.css"
 
 
 export const scroll = new SmoothScroll('a[href*="#"]', {

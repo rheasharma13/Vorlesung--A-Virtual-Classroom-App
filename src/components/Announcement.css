@@ -44,3 +44,12 @@
   
     margin:15px 0px;
 }
+.announcement_input> input{
+  border: none;
+padding: 8px 20px;
+width: 100%;
+margin-left: 20px;
+margin-right: 20px;
+font-size: 17px;
+outline: none;
+}

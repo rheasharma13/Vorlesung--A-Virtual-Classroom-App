@@ -208,35 +208,40 @@ a:focus,
   display: table;
   width: 100%;
   padding: 0;
-  background: url("https://cdn.vox-cdn.com/thumbor/7OlJnZ6kTrbywJiTo0fxUo_mmKs=/0x0:3000x2000/1200x675/filters:focal(1213x1230:1693x1710)/cdn.vox-cdn.com/uploads/chorus_image/image/67461699/VOX_16_F.0.jpg") center center no-repeat;
+  background: url("./images/intro-bg.jpg") center center no-repeat;
   background-color: #e5e5e5;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
   -o-background-size: cover;
+ 
 }
 .intro .overlay {
   background: rgba(0, 0, 0, 0.2);
 }
 .intro h1 {
   font-family: "Raleway", sans-serif;
-  color: #fff;
-  font-size: 50px;
-  font-weight: 700;
+  /* color:#3279a8; */
+  color:#3b4247;
+  font-size: 40px;
+  font-weight: 600;
   text-transform: uppercase;
   margin-top: 0;
   margin-bottom: 10px;
+  opacity: 1.0
+  
 }
 .intro h1 span {
   font-weight: 800;
   color: #5ca9fb;
 }
 .intro p {
-  color: #fff;
-  font-size: 22px;
+  color:#643b8c;
+  font-size: 20px;
   font-weight: 600;
   line-height: 30px;
-  margin: 0 auto;
+  margin: 0px auto;
+  margin-top:40px;
   margin-bottom: 60px;
 }
 header .intro-text {

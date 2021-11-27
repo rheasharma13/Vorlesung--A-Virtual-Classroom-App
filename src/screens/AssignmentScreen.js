@@ -1,5 +1,4 @@
-import { IconButton, Button } from "@material-ui/core";
-import { SendOutlined } from "@material-ui/icons";
+import { Button, LinearProgress } from "@material-ui/core";
 import moment from "moment";
 import React from "react";
 import { useEffect } from "react";
@@ -7,23 +6,23 @@ import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory, useParams } from "react-router-dom";
 import Assignment from "../components/Assignment";
-import async from "async"
-import emailjs from "emailjs-com"
+import async from "async";
+import emailjs from "emailjs-com";
 import { auth, db, storage } from "../firebase";
-
 import "./Class.css";
 
+//to display all the assignments
 function AssignmentScreen() {
   const [classData, setClassData] = useState({});
   const [assignmentTitle, setAssignmentTitle] = useState("");
   const [assignmentNote, setAssignmentNote] = useState("");
   const [assignmentSubmissionDate, setAssignmentSubmissionDate] =
-    useState("2001-11-02");
+    useState("2021-11-24");
   const [file, setFile] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [percentage, setPercentage] = useState(0);
-
+  const [keyString, setKeyString] = useState("keyString");
   const [assignmentData, setAssignmentData] = useState([]);
   const [user, loading, error] = useAuthState(auth);
   const { id } = useParams();
@@ -40,7 +39,6 @@ function AssignmentScreen() {
 
     let reversedArray = myClassData?.assignments?.reverse();
     setAssignmentData(reversedArray);
-    
   }, [assignmentData]);
 
   const createAssignment = async () => {
@@ -61,32 +59,46 @@ function AssignmentScreen() {
         myClassRef.ref.update({
           assignments: tempAssignments,
         });
-        async.each(classData?.enrolledStudents,function(email){
-          async.waterfall([function(){
-            const templateParams= {
-              item:"Assignment",
-              className:classData.name,
-              url: "localhost:3000/class/"+id+"/assignments",
-              recipient:email
-            }
-            emailjs.send('service_sndm6ld', 'template_bo7xt4c', templateParams,"user_3T2tYqOmDN3n8XpkX43g5")
-        .then(function(response) {
-         console.log('SUCCESS!', response.status, response.text);
-      }, function(error) {
-         console.log('FAILED...', error);
-      });
-          }])
-  
-        },function(err) {
-          if( err ) {
+        async.each(
+          classData?.enrolledStudents,
+          function (email) {
+            async.waterfall([
+              function () {
+                const templateParams = {
+                  item: "Assignment",
+                  className: classData.name,
+                  url: "localhost:3000/class/" + id + "/assignments",
+                  recipient: email,
+                };
+                emailjs
+                  .send(
+                    "service_sndm6ld",
+                    "template_bo7xt4c",
+                    templateParams,
+                    "user_3T2tYqOmDN3n8XpkX43g5"
+                  )
+                  .then(
+                    function (response) {
+                      console.log("SUCCESS!", response.status, response.text);
+                    },
+                    function (error) {
+                      console.log("FAILED...", error);
+                    }
+                  );
+              },
+            ]);
+          },
+          function (err) {
+            if (err) {
               console.log(err);
-          } else {
-              console.log('All emails have been sent successfully');
+            } else {
+              console.log("All emails have been sent successfully");
+            }
           }
-        })
-        alert("Assignment submitted successfully!")
+        );
+        alert("Assignment submitted successfully!");
         setAssignmentTitle("");
-        setAssignmentData(tempAssignments)
+        setAssignmentData(tempAssignments);
         setAssignmentNote("");
         setAssignmentSubmissionDate("");
         setFile(null);
@@ -106,21 +118,18 @@ function AssignmentScreen() {
     let uploadedfiles = uploadedFiles;
     let path;
     setIsUploading(true);
-    // this.setState({ isUploading: true });
-    // console.log("File",file.name)
+
     storage
-      .ref("assignment_files/" + id + "_" + assignmentNumber + "/" + file.name)
+      .ref("assignment_files/" + id + "_" + assignmentNumber + "/" + file?.name)
       .put(file)
       .on(
         "state_changed",
         (fileSnapshot) => {
-          // console.log("Snapshot",fileSnapshot.ref.fullPath)
           let percent =
             (fileSnapshot.bytesTransferred / fileSnapshot.totalBytes) * 100;
-          // console.log("Percent",percent)
+
           path = fileSnapshot.ref.fullPath;
           setPercentage(percent);
-          // this.setState({ percentage });
         },
         (error) => {
           console.log(error);
@@ -144,7 +153,7 @@ function AssignmentScreen() {
                 downloadURL: url,
               });
               setUploadedFiles(uploadedfiles);
-              alert("File uploaded successfully!")
+              alert("File uploaded successfully!");
             });
         }
       );
@@ -166,7 +175,7 @@ function AssignmentScreen() {
   }, [loading, user]);
 
   return (
-    <div className="class" style={{marginTop:"80px"}}>
+    <div className="class" style={{ marginTop: "80px" }}>
       <div className="class__nameBox">
         <div className="class__name">{classData?.name}</div>
         <p>Created By: {classData.creatorName}</p>
@@ -178,7 +187,7 @@ function AssignmentScreen() {
             history.push("/class/" + id);
           }}
         >
-          Lectures
+          <p>Lectures</p>
         </Button>
         <Button
           onClick={(e) => {
@@ -186,7 +195,7 @@ function AssignmentScreen() {
             history.push("/class/" + id + "/discussion");
           }}
         >
-          Discussion
+          <p>Discussion</p>
         </Button>
 
         <Button
@@ -195,13 +204,13 @@ function AssignmentScreen() {
             history.push("/class/" + id + "/assignments");
           }}
         >
-          Assignments
+          <p>Assignments</p>
         </Button>
       </div>
 
       {user?.uid == classData.creatorUid ? (
         <div className="class__announce">
-          <h3>Create an Assignment</h3>
+          <h3><b>Create an Assignment</b></h3>
           <input
             type="text"
             value={assignmentTitle}
@@ -211,7 +220,9 @@ function AssignmentScreen() {
           />
 
           {/* <MuiPickersUtilsProvider utils={MomentUtils}> */}
-          <label><p>Submission Date:</p> </label>
+          <label>
+            <p>Submission Date:</p>{" "}
+          </label>
           <input
             placeholder="Enter the lecture date (DD/MM/YYYY)"
             type="date"
@@ -228,15 +239,7 @@ function AssignmentScreen() {
             placeholder="Add a note (optional)"
           />
 
-          {/* <DatePicker
-        value={lectureDate}
-        onChange={(e)=> setLectureDate(e.target.value)}
-        format="DD/MM/YYYY"
-        autoOk
-        disablePast
-        
-        ampm={false}
-      /> */}
+          
 
           <div
             style={{
@@ -249,13 +252,16 @@ function AssignmentScreen() {
           >
             <input
               type="file"
+              key={keyString}
               onChange={(e) => {
                 setFile(e.target.files[0]);
+                setKeyString("");
               }}
             />
 
             <button
               variant="contained"
+              disabled={isUploading}
               style={{ "margin-right": "auto", display: "flex" }}
               onClick={(e) => uploadFile(e)}
             >
@@ -263,13 +269,26 @@ function AssignmentScreen() {
               Upload File{" "}
             </button>
           </div>
+
+          {isUploading ? (
+            <LinearProgress
+              style={{ width: "500px", marginLeft: "30px", padding: "4px" }}
+              variant="determinate"
+              value={percentage}
+            />
+          ) : (
+            ""
+          )}
+
           <Button
             variant="contained"
+            size="medium"
             style={{
               "margin-left": "auto",
               display: "block",
               "background-color": "green",
               color: "white",
+              fontSize: "15px",
             }}
             onClick={createAssignment}
           >
@@ -279,7 +298,9 @@ function AssignmentScreen() {
       ) : (
         ""
       )}
-      {user?.uid!==classData?.creatorUid && assignmentData?.length===0 ? <div style={{
+      {user?.uid !== classData?.creatorUid && assignmentData?.length === 0 ? (
+        <div
+          style={{
             display: "block",
             marginLeft: "auto",
             marginRight: "auto",
@@ -288,8 +309,14 @@ function AssignmentScreen() {
             marginBottom: "10px",
             width: "60%",
           }}
-        > <h3>No assignments added yet!</h3></div>:""}
-      {assignmentData?.map((assignment,index) => (
+        >
+          {" "}
+          <h3>No assignments added yet!</h3>
+        </div>
+      ) : (
+        ""
+      )}
+      {assignmentData?.map((assignment, index) => (
         <Assignment
           creatorId={classData.creatorUid}
           title={assignment.title}

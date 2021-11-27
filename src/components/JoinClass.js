@@ -13,6 +13,8 @@ import { useRecoilState } from "recoil";
 import { auth, db } from "../firebase";
 import { joinDialogAtom } from "../utils/atoms";
 
+
+//to display the join class dialog box
 function JoinClass() {
   const [open, setOpen] = useRecoilState(joinDialogAtom);
   const [user, loading, error] = useAuthState(auth);
@@ -40,13 +42,9 @@ function JoinClass() {
         id: classId,
         name: classData.name,
       });
-      if(classData?.creatorUid!==user.uid)
-      {
-        let tempStudents=classData?.enrolledStudents;
-        tempStudents.push(
-          
-          user.email
-        )
+      if (classData?.creatorUid !== user.uid) {
+        let tempStudents = classData?.enrolledStudents;
+        tempStudents.push(user.email);
         await classRef.ref.update({
           enrolledStudents: tempStudents,
         });
@@ -72,15 +70,17 @@ function JoinClass() {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Join class</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          <p>Join class</p>
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Enter ID of the class to join the classroom
+            <p>Enter the ID of the class to join the classroom</p>
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            label="Class Name"
+            label="Class ID"
             type="text"
             fullWidth
             value={classId}
@@ -89,10 +89,10 @@ function JoinClass() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Cancel
+            <p> Cancel</p>
           </Button>
           <Button onClick={joinClass} color="primary">
-            Join
+            <p>Join</p>
           </Button>
         </DialogActions>
       </Dialog>

@@ -1077,14 +1077,14 @@ th {
           box-sizing: border-box;
 }
 html {
-  font-size: 10px;
+ 
 
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.42857143;
+  
+ 
+  
   color: #333;
   background-color: #fff;
 }
@@ -1270,10 +1270,7 @@ h2,
 .h2 {
   font-size: 30px;
 }
-h3,
-.h3 {
-  font-size: 24px;
-}
+
 h4,
 .h4 {
   font-size: 18px;
@@ -1286,9 +1283,7 @@ h6,
 .h6 {
   font-size: 12px;
 }
-p {
-  margin: 0 0 10px;
-}
+
 .lead {
   margin-bottom: 20px;
   font-size: 16px;
@@ -2508,7 +2503,7 @@ legend {
 label {
   display: inline-block;
   max-width: 100%;
-  margin-bottom: 5px;
+ 
   font-weight: bold;
 }
 input[type="search"] {

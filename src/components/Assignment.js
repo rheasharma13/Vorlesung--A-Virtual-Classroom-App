@@ -1,13 +1,11 @@
-import { Button, Menu, MenuItem, IconButton } from "@material-ui/core";
-import { MoreVert } from "@material-ui/icons";
-
+import { Button, LinearProgress } from "@material-ui/core";
 import React, { useState } from "react";
 import "./Announcement.css";
 import { auth, db, storage } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from "react-router-dom";
-import AssignmentSubmissions from "./AssignmentSubmissions";
 
+//to display an assignment
 function Assignment({
   creatorId,
   title,
@@ -19,39 +17,39 @@ function Assignment({
   image,
   index,
 }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
+ 
   const [user, loading, error] = useAuthState(auth);
-  const open = Boolean(anchorEl);
-  
+  const [keyString, setKeyString] = useState("keystring");
   const history = useHistory();
-  const [classData,setClassData]=useState({})
+  const [classData, setClassData] = useState({});
   const [file, setFile] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submittedFiles,setSubmittedFiles]=useState([]);
-  const [submissions,setSubmissions]=useState([]);
+  const [submittedFiles, setSubmittedFiles] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
+
+  //collect submissions
   React.useEffect(async () => {
     const myClassRef = await db.collection("classes").doc(classId).get();
     const myClassData = await myClassRef.data();
-    setSubmissions(myClassData?.assignments[index]?.submissions)
-    submissions?.map(submission=>{
-      if(submission?.studentId===user.uid) {
-        setIsSubmitted(true)
-        setSubmittedFiles(submission?.files)
+    setSubmissions(myClassData?.assignments[index]?.submissions);
+    submissions?.map((submission) => {
+      if (submission?.studentId === user.uid) {
+        setIsSubmitted(true);
+        setSubmittedFiles(submission?.files);
       }
-    })
-    // console.log("submissions",submissions)
+    });
   }, [submissions]);
+
+  //collect class data
   React.useEffect(() => {
     db.collection("classes")
       .doc(classId)
       .onSnapshot((snapshot) => {
         const data = snapshot.data();
         if (!data) history.replace("/");
-
         setClassData(data);
       });
   }, []);
@@ -60,8 +58,8 @@ function Assignment({
     if (loading) return;
     if (!user) history.replace("/");
   }, [loading, user]);
-  
 
+  //Display Uploaded Files
   const displayUploadedFiles = (files) => {
     return files?.map((file, index) => {
       return (
@@ -69,9 +67,9 @@ function Assignment({
           <div
             style={{
               display: "flex",
-              
+
               padding: "15px 20px",
-              
+
               "justify-content": "space-between",
             }}
           >
@@ -90,35 +88,32 @@ function Assignment({
     });
   };
 
-  
-  
-
+  //function to submit assignment
   const submitAssignment = async (e) => {
     e.preventDefault();
     try {
       if (isUploading == false) {
-
         const myClassRef = await db.collection("classes").doc(classId).get();
         const myClassData = await myClassRef.data();
-        var student = user;
+
         let tempAssignments = myClassData?.assignments;
         tempAssignments[index]?.submissions?.push({
-          studentId:user.uid,
-          studentName:user.displayName,
-          studentImage:user.photoURL,
+          studentId: user.uid,
+          studentName: user.displayName,
+          studentImage: user.photoURL,
           files: uploadedFiles,
-          marks: -1
+          marks: -1,
         });
-        
-        myClassRef.ref.update({
+
+       await myClassRef.ref.update({
           assignments: tempAssignments,
         });
-        // setSubmissions(myClassData?.assignments[index]?.submissions)
-        // console.log("Submissions",submissions)
+        setSubmissions(myClassData?.assignments[index]?.submissions);
 
+        setIsSubmitted(true);
         setFile(null);
         setUploadedFiles([]);
-        alert('Assignment submitted successfully!')
+        alert("Assignment submitted successfully!");
       }
     } catch (error) {
       console.error(error);
@@ -128,14 +123,11 @@ function Assignment({
 
   const uploadFile = (e) => {
     e.preventDefault();
-    // const { file } = this.state;
-    // const { subjectName, subjectCode } = this.props;
-    console.log("FIle",file)
+
     let uploadedfiles = uploadedFiles;
     let path;
     setIsUploading(true);
-    // this.setState({ isUploading: true });
-    // console.log("File",file.name)
+    //uploading the file to Firebase Storage
     storage
       .ref(
         "assignment_files/" +
@@ -150,13 +142,11 @@ function Assignment({
       .on(
         "state_changed",
         (fileSnapshot) => {
-          // console.log("Snapshot",fileSnapshot.ref.fullPath)
           let percent =
             (fileSnapshot.bytesTransferred / fileSnapshot.totalBytes) * 100;
-          console.log("Percent",percent)
+
           path = fileSnapshot.ref.fullPath;
           setPercentage(percent);
-          // this.setState({ percentage });
         },
         (error) => {
           console.log(error);
@@ -180,8 +170,6 @@ function Assignment({
                 downloadURL: url,
               });
               setUploadedFiles(uploadedfiles);
-              console.log(uploadedFiles);
-              alert("File uploaded successfully!")
             });
         }
       );
@@ -218,73 +206,96 @@ function Assignment({
       <div className="announcement__content">
         <b>Files attached:</b>
       </div>
-   
 
       {displayUploadedFiles(files)}
+
       <div className="huge-button">
         {user.uid === creatorId ? (
-          <Button style={{ "background-color": "#99e699", width: "100%" }} onClick={(e)=>{e.preventDefault(); history.push("/class/"+classId+"/assignments/"+index+"/submissions")}}>
-            See Student Submissions
+          <Button
+            size="small"
+            style={{ "background-color": "#99e699", width: "100%" }}
+            onClick={(e) => {
+              e.preventDefault();
+              history.push(
+                "/class/" + classId + "/assignments/" + index + "/submissions"
+              );
+            }}
+          >
+            <p>See Student Submissions</p>
           </Button>
-          
         ) : (
           ""
         )}
-        
-      
-       
 
-        {user.uid !== creatorId && isSubmitted==false ? (
-         
-            <div>
-              <div style={{ width: "100%" }}>
-                <b>Submit Assignment here:</b>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  "margin-left": "20px",
-                  padding: "15px 20px",
-                  "margin-right": "20px",
-                  "justify-content": "space-between",
-                }}
-              >
-                <input
-                  type="file"
-                  onChange={(e) => {
-                    setFile(e.target.files[0]);
-                  }}
-                />
-
-                <button
-                  variant="contained"
-                  style={{ "margin-right": "auto", display: "flex" }}
-                  onClick={(e) => { uploadFile(e)}}
-                >
-                  {" "}
-                  Upload File{" "}
-                </button>
-              </div>
-              <Button
-                variant="contained"
-                style={{
-                  "margin-left": "auto",
-                  display: "block",
-                  "background-color": "green",
-                  color: "white",
-                }}
-                onClick={submitAssignment}
-              >
-                Submit
-              </Button>
+        {user.uid !== creatorId && isSubmitted == false ? (
+          <div>
+            <div style={{ width: "100%" }}>
+              <b>Submit Assignment here:</b>
             </div>
-         
+            <div
+              style={{
+                display: "flex",
+                "margin-left": "20px",
+                padding: "15px 20px",
+                "margin-right": "20px",
+                "justify-content": "space-between",
+              }}
+            >
+              <input
+                type="file"
+                key={keyString}
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                  setKeyString("");
+                }}
+              />
+
+              <button
+                variant="contained"
+                disabled={isUploading}
+                style={{ "margin-right": "auto", display: "flex" }}
+                onClick={(e) => {
+                  uploadFile(e);
+                }}
+              >
+                {" "}
+                Upload File{" "}
+              </button>
+            </div>
+            {isUploading ? (
+              <LinearProgress
+                style={{ width: "500px", marginLeft: "30px", padding: "4px" }}
+                variant="determinate"
+                value={percentage}
+              />
+            ) : (
+              ""
+            )}
+            <Button
+              variant="contained"
+              style={{
+                "margin-left": "auto",
+                display: "block",
+                "background-color": "green",
+                color: "white",
+              }}
+              onClick={submitAssignment}
+            >
+              Submit
+            </Button>
+          </div>
         ) : (
           ""
         )}
-        {user.uid!==creatorId && isSubmitted?<div> <b>Assignment has been submitted. Submitted Files:</b> {displayUploadedFiles(submittedFiles)}</div>:""}
-        
-
+        {user.uid !== creatorId && isSubmitted ? (
+          <div>
+            {" "}
+            <b>Assignment has been submitted. Submitted Files:</b>{" "}
+            {displayUploadedFiles(submittedFiles)}
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
