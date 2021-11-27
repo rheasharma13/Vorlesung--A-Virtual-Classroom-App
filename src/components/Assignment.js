@@ -17,7 +17,6 @@ function Assignment({
   image,
   index,
 }) {
- 
   const [user, loading, error] = useAuthState(auth);
   const [keyString, setKeyString] = useState("keystring");
   const history = useHistory();
@@ -29,7 +28,7 @@ function Assignment({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedFiles, setSubmittedFiles] = useState([]);
   const [submissions, setSubmissions] = useState([]);
-
+  const [marks, setMarksObtained] = useState("-1");
   //collect submissions
   React.useEffect(async () => {
     const myClassRef = await db.collection("classes").doc(classId).get();
@@ -38,6 +37,7 @@ function Assignment({
     submissions?.map((submission) => {
       if (submission?.studentId === user.uid) {
         setIsSubmitted(true);
+        setMarksObtained(submission?.marks);
         setSubmittedFiles(submission?.files);
       }
     });
@@ -105,7 +105,7 @@ function Assignment({
           marks: -1,
         });
 
-       await myClassRef.ref.update({
+        await myClassRef.ref.update({
           assignments: tempAssignments,
         });
         setSubmissions(myClassData?.assignments[index]?.submissions);
@@ -292,6 +292,7 @@ function Assignment({
             {" "}
             <b>Assignment has been submitted. Submitted Files:</b>{" "}
             {displayUploadedFiles(submittedFiles)}
+            {marks != "-1" ? <div>Marks Obtained: {marks}</div> : ""}
           </div>
         ) : (
           ""

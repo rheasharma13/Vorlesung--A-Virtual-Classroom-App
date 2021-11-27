@@ -328,6 +328,7 @@ function AssignmentScreen() {
           name={classData.creatorName}
           image={classData.creatorPhoto}
           index={index}
+          
           // isReported={post.isReported}
         />
       ))}
