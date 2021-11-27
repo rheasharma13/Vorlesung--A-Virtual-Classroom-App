@@ -40,6 +40,17 @@ function JoinClass() {
         id: classId,
         name: classData.name,
       });
+      if(classData?.creatorUid!==user.uid)
+      {
+        let tempStudents=classData?.enrolledStudents;
+        tempStudents.push(
+          
+          user.email
+        )
+        await classRef.ref.update({
+          enrolledStudents: tempStudents,
+        });
+      }
       await (
         await userRef.get()
       ).docs[0].ref.update({

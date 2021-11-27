@@ -53,8 +53,8 @@ export default function Navigation() {
           className='collapse navbar-collapse'
           id='bs-example-navbar-collapse-1'
         >
-          <ul className='nav navbar-nav navbar-right'>
-            {user ?(<div><li>
+         
+            {user ?( <ul className='nav navbar-nav navbar-right'><li>
               <a href='/dashboard' className='page-scroll'>
                 Enrolled Classes
               </a>
@@ -78,12 +78,12 @@ export default function Navigation() {
             </li>
               
               <li><a onClick={logout}>Logout</a></li>
-              </div>  
+              </ul>
               
               
-            ) :<li><a onClick={signInWithGoogle}>Login</a></li>}
+            ) :<ul className='nav navbar-nav navbar-right'><li><a onClick={signInWithGoogle}>Login</a></li></ul>}
             
-          </ul>
+          
         </div>
       </div>
     </nav>

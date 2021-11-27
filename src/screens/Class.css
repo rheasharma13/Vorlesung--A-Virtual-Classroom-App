@@ -51,7 +51,7 @@
   border-radius: 9999px;
 }
 
-.class__announce > input,label,h2 {
+.class__announce > input,label,h2,h3 {
   border: none;
   padding: 15px 20px;
   width: 100%;

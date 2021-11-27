@@ -37,7 +37,8 @@ function CreateClass() {
             posts: [],
             reportedPosts: [],
             lectures:[],
-            assignments:[]
+            assignments:[],
+            enrolledStudents:[]
           });
     
           // add to current user's class list

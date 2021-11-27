@@ -26,14 +26,21 @@ function ClassCard({ name, creatorName, creatorPhoto, id, style,creatorId }) {
         // add class to user
         const userRef = await db.collection("users").where("uid", "==", user.uid);
         const userData = await (await userRef.get()).docs[0].data();
+        let tempStudents=classData?.enrolledStudents;
         let tempClassrooms = userData.enrolledClassrooms;
         var deletedClassArray = tempClassrooms.filter(function(classroom) { return classroom.id !== id })
+        var updatedStudents=tempStudents.filter(function(student) { return student.studentId !== user.uid})
         console.log("Deleted",deletedClassArray)
         await (
           await userRef.get()
         ).docs[0].ref.update({
           enrolledClassrooms: deletedClassArray,
         });
+        await classRef.ref.update(
+          {
+            enrolledStudents:updatedStudents
+          }
+        )
         // alert done
         
       } catch (err) {

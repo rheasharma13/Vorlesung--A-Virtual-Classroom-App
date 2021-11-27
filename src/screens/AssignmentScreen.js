@@ -7,7 +7,8 @@ import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory, useParams } from "react-router-dom";
 import Assignment from "../components/Assignment";
-
+import async from "async"
+import emailjs from "emailjs-com"
 import { auth, db, storage } from "../firebase";
 
 import "./Class.css";
@@ -60,6 +61,30 @@ function AssignmentScreen() {
         myClassRef.ref.update({
           assignments: tempAssignments,
         });
+        async.each(classData?.enrolledStudents,function(email){
+          async.waterfall([function(){
+            const templateParams= {
+              item:"Assignment",
+              className:classData.name,
+              url: "localhost:3000/class/"+id+"/assignments",
+              recipient:email
+            }
+            emailjs.send('service_sndm6ld', 'template_bo7xt4c', templateParams,"user_3T2tYqOmDN3n8XpkX43g5")
+        .then(function(response) {
+         console.log('SUCCESS!', response.status, response.text);
+      }, function(error) {
+         console.log('FAILED...', error);
+      });
+          }])
+  
+        },function(err) {
+          if( err ) {
+              console.log(err);
+          } else {
+              console.log('All emails have been sent successfully');
+          }
+        })
+        alert("Assignment submitted successfully!")
         setAssignmentTitle("");
         setAssignmentData(tempAssignments)
         setAssignmentNote("");
@@ -119,7 +144,7 @@ function AssignmentScreen() {
                 downloadURL: url,
               });
               setUploadedFiles(uploadedfiles);
-              console.log(uploadedFiles);
+              alert("File uploaded successfully!")
             });
         }
       );
@@ -141,7 +166,7 @@ function AssignmentScreen() {
   }, [loading, user]);
 
   return (
-    <div className="class">
+    <div className="class" style={{marginTop:"80px"}}>
       <div className="class__nameBox">
         <div className="class__name">{classData?.name}</div>
         <p>Created By: {classData.creatorName}</p>
@@ -176,7 +201,7 @@ function AssignmentScreen() {
 
       {user?.uid == classData.creatorUid ? (
         <div className="class__announce">
-          <h2>Create an Assignment</h2>
+          <h3>Create an Assignment</h3>
           <input
             type="text"
             value={assignmentTitle}
@@ -186,7 +211,7 @@ function AssignmentScreen() {
           />
 
           {/* <MuiPickersUtilsProvider utils={MomentUtils}> */}
-          <label>Submission Date: </label>
+          <label><p>Submission Date:</p> </label>
           <input
             placeholder="Enter the lecture date (DD/MM/YYYY)"
             type="date"

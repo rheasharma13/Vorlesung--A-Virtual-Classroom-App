@@ -77,7 +77,7 @@ function AssignmentSubmissions() {
   };
 
   return (
-    <div className="class" style={{ "margin-top": "20px" }}>
+    <div className="class" style={{ "margin-top": "80px" }}>
       <div className="announcement">
         <div
           className="announcement__informationContainer"

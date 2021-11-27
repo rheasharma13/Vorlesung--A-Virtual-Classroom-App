@@ -9,6 +9,8 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "async": "^3.2.2",
+    "emailjs-com": "^3.2.0",
     "firebase": "^8.7.0",
     "material-ui-pickers": "^2.2.4",
     "moment": "^2.29.1",

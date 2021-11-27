@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./screens/Home";
 import Dashboard from "./screens/Dashboard";
-import Navbar from "./components/Navbar";
+import Navigation from "./components/Navigation";
 import Class from "./screens/Class";
 import CreateClass from "./components/CreateClass";
 import LectureScreen from "./screens/LectureScreen";
@@ -10,6 +10,15 @@ import AssignmentScreen from "./screens/AssignmentScreen";
 import AssignmentSubmissions from "./components/AssignmentSubmissions";
 import CreatedClasses from "./screens/CreatedClasses"
 import ReportedPosts from "./screens/ReportedPosts"
+import SmoothScroll from "smooth-scroll";
+import "./style.css"
+import "./bootstrap.min.css"
+
+
+export const scroll = new SmoothScroll('a[href*="#"]', {
+  speed: 1000,
+  speedAsDuration: true,
+});
 function App() {
   return (
     <div className="app">
@@ -19,35 +28,35 @@ function App() {
             <Home />
           </Route>
           <Route exact path="/dashboard">
-            <Navbar />
+            <Navigation />
             <Dashboard />
           </Route>
           <Route exact path="/created-classes">
-            <Navbar />
+            <Navigation />
             <CreatedClasses />
           </Route>
           <Route exact path="/class/:id">
-            <Navbar />
+            <Navigation />
             <LectureScreen />
           </Route>
           <Route exact path="/class/:id/reported-posts">
-            <Navbar />
+            <Navigation />
             <ReportedPosts />
           </Route>
           <Route exact path="/class/:id/discussion">
-            <Navbar />
+            <Navigation />
             <Class />
           </Route>
           <Route exact path="/class/:id/assignments">
-            <Navbar />
+            <Navigation />
             <AssignmentScreen />
           </Route>
           <Route exact path="/class/:id/assignments/:assignmentNumber/submissions">
-            <Navbar />
+            <Navigation />
             <AssignmentSubmissions />
           </Route>
           {/* <Route exact path="/createclass">
-            <Navbar />
+            <Navigation />
             <CreateClass/>
           </Route> */}
         </Switch>

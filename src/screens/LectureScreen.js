@@ -6,7 +6,8 @@ import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory, useParams } from "react-router-dom";
 import Lecture from "../components/Lecture";
-
+import emailjs from  "emailjs-com"
+import async from "async"
 import { auth, db } from "../firebase";
 
 import "./Class.css";
@@ -42,6 +43,7 @@ function LectureScreen() {
     setLectureData(reversedArray);
   }, [lectureData]);
 
+  
   const createLecture = async () => {
     try {
       const myClassRef = await db.collection("classes").doc(id).get();
@@ -59,6 +61,29 @@ function LectureScreen() {
       myClassRef.ref.update({
         lectures: tempLectures,
       });
+      async.each(classData?.enrolledStudents,function(email){
+        async.waterfall([function(){
+          const templateParams= {
+            item:"Lecture",
+            className:classData.name,
+            url: "localhost:3000/class/"+id,
+            recipient:email
+          }
+          emailjs.send('service_sndm6ld', 'template_bo7xt4c', templateParams,"user_3T2tYqOmDN3n8XpkX43g5")
+      .then(function(response) {
+       console.log('SUCCESS!', response.status, response.text);
+    }, function(error) {
+       console.log('FAILED...', error);
+    });
+        }])
+
+      },function(err) {
+        if( err ) {
+            console.log(err);
+        } else {
+            alert('All emails have been sent successfully');
+        }
+      })
       setLectureTitle("");
       setLectureLink("");
       setLectureNote("");
@@ -87,7 +112,7 @@ function LectureScreen() {
   }, [loading, user]);
 
   return (
-    <div className="class">
+    <div className="class" style={{marginTop:"80px"}}>
       <div className="class__nameBox">
         <div className="class__name">{classData?.name}</div>
         <p>Created By: {classData?.creatorName}</p>
@@ -120,8 +145,9 @@ function LectureScreen() {
       </div>
 
       {user?.uid == classData.creatorUid ? (
+        
         <div className="class__announce">
-          <h2>Create a Lecture</h2>
+          <h3>Create a Lecture</h3>
           <input
             type="text"
             value={lectureTitle}
@@ -131,7 +157,7 @@ function LectureScreen() {
           />
 
           {/* <MuiPickersUtilsProvider utils={MomentUtils}> */}
-          <label>Lecture Date: </label>
+          <label><p>Lecture Date:</p> </label>
           <input
             placeholder="Enter the lecture date (DD/MM/YYYY)"
             type="date"
@@ -139,7 +165,7 @@ function LectureScreen() {
             required
             onChange={(e) => setLectureDate(e.target.value)}
           />
-          <label>Lecture Time:</label>
+          <label><p>Lecture Time:</p></label>
           <input
             type="time"
             value={lectureTime}

@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { auth, signInWithGoogle } from "../firebase";
 import "./Home.css";
 
-import  Navbar  from "../components/Navbar";
+
 import { Header } from "../components/Header";
 import { Features } from "../components/Features";
 import { About } from "../components/About";

@@ -39,7 +39,7 @@ function Dashboard() {
   }, [user, loading]);
 
   return (
-    <div className="dashboard">
+    <div className="dashboard " style={{marginTop:"50px"}}>
       {
       classes?.length === 0 ? (
         <div className="dashboard__404">

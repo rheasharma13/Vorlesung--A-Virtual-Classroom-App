@@ -70,7 +70,7 @@ function Class() {
   }, [loading, user]);
 
   return (
-    <div className="class">
+    <div className="class" style={{marginTop:"80px"}}>
       <div className="class__nameBox">
         <div className="class__name">{classData?.name}</div>
         <p>Created By: {classData.creatorName}</p>
