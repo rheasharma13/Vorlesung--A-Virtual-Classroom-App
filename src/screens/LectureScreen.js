@@ -185,7 +185,7 @@ function LectureScreen() {
             <p>Lecture Time:</p>
           </label>
           <input
-            type="time"
+            type="text"
             value={lectureTime}
             required
             onChange={(e) => setLectureTime(e.target.value)}
