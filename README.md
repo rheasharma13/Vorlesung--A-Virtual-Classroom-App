@@ -58,7 +58,7 @@ Build a functional prototype of a platform that gives students an array of digit
 
 ## ER Diagram
 
-![ER Diagram](ER Diagram.png)
+![ER Diagram](ERDiagram.png)
 
 ## Limitations and Further Improvements
 
