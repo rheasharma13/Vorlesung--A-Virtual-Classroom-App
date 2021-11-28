@@ -1,70 +1,120 @@
-# Getting Started with Create React App
+# Vorlesung- A virtual classroom application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project has been developed for the Microsoft Engage Program 2021.The main motivation behind this project is to make remote teaching and learning easier. It helps teachers create classes and share assignments and lectures with the students. It also has a discussion forum to encourage interaction between the students and their teachers. Everytime, an assignment or  a lecture is created, all the students enrolled in the class get notified via email.
 
-## Available Scripts
+## Live Demo
 
-In the project directory, you can run:
+To see the app in action, go to [https://virtual-classroom-b6fed.web.app/](https://virtual-classroom-b6fed.web.app/)
 
-### `npm start`
+## Presentation Link:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+[https://www.canva.com/design/DAExAusV3f0/BsgDnDclHcMzbYhnzmAZhg/view?utm_content=DAExAusV3f0&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton](https://www.canva.com/design/DAExAusV3f0/BsgDnDclHcMzbYhnzmAZhg/view?utm_content=DAExAusV3f0&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## The Challenge
 
-### `npm test`
+Build a functional prototype of a platform that gives students an array of digital academic and social tools to stay engaged with their studies, peers and broader university community during pandemic.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
 
-### `npm run build`
+- Authentication:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  - Users can login with their Google Account
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  - Admin sign-up with admin code
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- For Teachers:
 
-### `npm run eject`
+  - Create a Class and share the Class Code with the students.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  - Create Lectures.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  - Discuss with students.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  - Create Assignments.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  - Grade Assignments.
 
-## Learn More
+  - Delete reported posts, if found to be offensive.
+  
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- For students:
 
-### Code Splitting
+  - Join a class using the code shared by the teacher.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+  - Discuss with your teachers and peers.
 
-### Analyzing the Bundle Size
+  - Get notified via email when an assignment or lecture is created by the teacher.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+  - View lecture information.
 
-### Making a Progressive Web App
+  - View and submit assignments.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+  - Report posts.
 
-### Advanced Configuration
+## Design 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+![Design](Design.png)
 
-### Deployment
+## ER Diagram
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+![ER Diagram](ER Diagram.png)
 
-### `npm run build` fails to minify
+## Limitations and Further Improvements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Currently, only 200 emails per month can be sent(because of subscription limits). Email notifications can be included for other events (like notifying the teacher when a student submits an assignment) in the future.
+
+- Firebase hosting limits- Can handle 10K requests per month.
+
+- Firebase database limits and storage limits.
+
+- App can be further optimised by caching resources that are not changed frequently.
+
+
+## Getting Started
+
+
+### Clone or download this repository
+
+```sh
+git clone https://github.com/rheasharma13/Vorlesung--A-Virtual-Classroom-App.git
+```
+
+### Install dependencies
+
+```sh
+npm install
+```
+
+or
+
+```sh
+yarn install
+```
+
+### Run the app
+
+```sh
+npm start
+```
+
+## Built with
+
+### Front-end
+
+- [React](https://reactjs.org/)
+
+
+### Back-end
+
+- [Firebase](https://firebase.google.com)
+- [Firebase Real Time Database (NoSQL)](https://www.firebase.google.com/)
+- [Firebase Storage (for files)](https://firebase.google.com/)
+- [Emailjs- For sending emails](https://emailjs.com)
+
+
+
+### Platforms
+
+- [Firebase Hosting](https://www.firebase.google.com/)
+
