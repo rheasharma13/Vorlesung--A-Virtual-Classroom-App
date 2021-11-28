@@ -80,7 +80,7 @@ function Assignment({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Download File
+              View File
             </a>
           </div>
         </div>
