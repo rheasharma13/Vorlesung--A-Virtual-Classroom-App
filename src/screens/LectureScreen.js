@@ -20,7 +20,7 @@ function LectureScreen() {
     today.getDate() + " " + (today.getMonth() + 1) + " " + today.getFullYear()
   );
   const [lectureTime, setLectureTime] = useState(
-    today.getHours() + ":" + today.getMinutes()
+    ""
   );
   const [lectureNote, setLectureNote] = useState("");
   const [lectureLink, setLectureLink] = useState("");
