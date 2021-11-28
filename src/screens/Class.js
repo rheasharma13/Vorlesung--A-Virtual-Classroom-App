@@ -136,7 +136,7 @@ function Class() {
           name={post.name}
           classId={id}
           index={posts?.length - idx - 1}
-          // isReported={post.isReported}
+          reported={post.isReported}
         />
       ))}
     </div>

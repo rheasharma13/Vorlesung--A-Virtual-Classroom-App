@@ -113,6 +113,7 @@ function Assignment({
         setIsSubmitted(true);
         setFile(null);
         setUploadedFiles([]);
+        setKeyString("");
         alert("Assignment submitted successfully!");
       }
     } catch (error) {
@@ -243,10 +244,11 @@ function Assignment({
             >
               <input
                 type="file"
-                key={keyString}
+              key={keyString}
                 onChange={(e) => {
+                  e.preventDefault()
                   setFile(e.target.files[0]);
-                  setKeyString("");
+                  
                 }}
               />
 

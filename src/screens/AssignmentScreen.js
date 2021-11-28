@@ -103,6 +103,7 @@ function AssignmentScreen() {
         setAssignmentSubmissionDate("");
         setFile(null);
         setUploadedFiles([]);
+        setKeyString("");
       }
     } catch (error) {
       console.error(error);
@@ -254,8 +255,9 @@ function AssignmentScreen() {
               type="file"
               key={keyString}
               onChange={(e) => {
+                e.preventDefault()
                 setFile(e.target.files[0]);
-                setKeyString("");
+               
               }}
             />
 

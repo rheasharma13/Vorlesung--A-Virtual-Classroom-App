@@ -15,6 +15,7 @@ function Announcement({
   authorId,
   classId,
   index,
+  reported
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [user, loading, error] = useAuthState(auth);
@@ -38,9 +39,13 @@ function Announcement({
       .then((classdata) => {
       
         setClassData(classdata);
-        setReported(classdata[classId]?.posts[index]?.isReported);
+  
+        setReported(reported);
+        
       });
-      return setReported(false);
+      return () => {
+        setReported(false)
+      }
   }, []);
 
 
@@ -72,10 +77,11 @@ function Announcement({
           image: image,
           name: name,
         });
-        classRef.ref.update({
+        await classRef.ref.update({
           reportedPosts: reportedPosts,
           posts: allPosts,
         });
+        
       } catch (error) {
         console.error(error);
         alert(`There was an error reporting the post, please try again!`);
@@ -127,6 +133,7 @@ function Announcement({
             <div className="announcement__date">{date}</div>
           </div>
         </div>
+        {isReported}
         <div className="announcement__infoSection">
           <div>
             <IconButton
@@ -150,6 +157,7 @@ function Announcement({
               <MenuItem onClick={deletePost}>Delete</MenuItem>
 
               <MenuItem onClick={reportPost}>
+                
                 {isReported == false ? "Report to Admin" : "Reported"}
               </MenuItem>
             </Menu>
